@@ -1,0 +1,162 @@
+/* ============================================================
+   NaiRarm — Shared Stylesheet
+   Used by: all pages
+   ============================================================ */
+
+/* ── Reset & Design Tokens ──────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:        #00205f;
+  --navy-deep:   #000b58;
+  --teal:        #006a67;
+  --teal-light:  #00918d;
+  --cream:       #fff4b7;
+  --cream-dim:   #e8dfa0;
+  --white:       #f5f5f0;
+  --card-bg:     #0a2a5e;
+  --card-hover:  #0d3270;
+  --radius-card: 18px;
+  --radius-pill: 50px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  min-height: 100vh;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--navy-deep); }
+::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--teal-light); }
+
+/* ── Header / Logo ──────────────────────────────────────── */
+header {
+  background: var(--navy-deep);
+  padding: 0 48px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,244,183,.12);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+
+.logo {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 28px;
+  color: var(--cream);
+  letter-spacing: .5px;
+  text-decoration: none;
+}
+
+/* ── Nav Bar ────────────────────────────────────────────── */
+nav {
+  background: var(--teal);
+  padding: 0 48px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 2px solid rgba(0,0,0,.15);
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  padding: 0 22px;
+  background: var(--cream);
+  color: #111;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  transition: background .2s, transform .15s;
+  cursor: pointer;
+  border: none;
+}
+.nav-btn:hover { background: var(--cream-dim); transform: translateY(-1px); }
+.nav-btn.active { background: var(--navy-deep); color: var(--cream); outline: 2px solid var(--cream); outline-offset: -2px; }
+
+.nav-spacer { flex: 1; }
+
+/* ── Shared Heading ─────────────────────────────────────── */
+.section-heading {
+  font-family: 'Gamja Flower', cursive;
+  font-size: 72px;
+  color: var(--cream);
+  margin-bottom: 32px;
+  line-height: 1;
+}
+
+/* ── Book Card (index + search) ─────────────────────────── */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 22px;
+  margin-bottom: 72px;
+}
+
+.book-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-card);
+  padding: 16px 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+  border: 1px solid rgba(255,244,183,.07);
+  animation: fadeUp .4s ease both;
+}
+.book-card:hover {
+  transform: translateY(-5px);
+  background: var(--card-hover);
+  box-shadow: 0 12px 36px rgba(0,0,0,.4);
+}
+
+.book-cover {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: rgba(217,217,217,.18);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: rgba(255,255,255,.35);
+  font-style: italic;
+  overflow: hidden;
+  position: relative;
+}
+.book-cover::before {
+  content: '';
+  position: absolute;
+  left: 18%; top: 0; bottom: 0;
+  width: 2px;
+  background: rgba(255,255,255,.08);
+}
+.book-cover img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+
+.book-info { display: flex; flex-direction: column; gap: 4px; }
+.book-title  { font-family: 'Lora', serif; font-size: 14px; font-weight: 600; color: var(--white); line-height: 1.3; }
+.book-author { font-size: 12px; color: rgba(231,231,231,.6); font-weight: 300; }
+.book-price  { font-size: 13px; font-weight: 500; color: var(--cream); margin-top: 2px; }
+
+/* ── Fade-in Animation ──────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

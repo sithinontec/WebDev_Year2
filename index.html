@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NaiRarm — Bookshop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="./css/main.css" rel="stylesheet" />
+  <style>
+    /* index-specific */
+    main {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 56px 48px 80px;
+    }
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,244,183,.3), transparent);
+      margin-bottom: 56px;
+    }
+    .book-grid .book-card:nth-child(1)  { animation-delay: .05s }
+    .book-grid .book-card:nth-child(2)  { animation-delay: .10s }
+    .book-grid .book-card:nth-child(3)  { animation-delay: .15s }
+    .book-grid .book-card:nth-child(4)  { animation-delay: .20s }
+    .book-grid .book-card:nth-child(5)  { animation-delay: .25s }
+    .book-grid .book-card:nth-child(6)  { animation-delay: .30s }
+    .book-grid .book-card:nth-child(7)  { animation-delay: .35s }
+    .book-grid .book-card:nth-child(8)  { animation-delay: .40s }
+    .book-grid .book-card:nth-child(9)  { animation-delay: .45s }
+    .book-grid .book-card:nth-child(10) { animation-delay: .50s }
+    .book-grid .book-card:nth-child(11) { animation-delay: .55s }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <a class="logo" href="index.html">NaiRarm</a>
+  </header>
+
+  <!-- Nav -->
+  <nav>
+    <button class="nav-btn active" onclick="location.href='index.html'">Home</button>
+    <button class="nav-btn" onclick="location.href='search.html'">Browse</button>
+    <button class="nav-btn" onclick="location.href='login.html'">Admin</button>
+    <span class="nav-spacer"></span>
+    <button class="nav-btn" onclick="location.href='team.html'">Our Team</button>
+  </nav>
+
+  <!-- Main -->
+  <main>
+
+    <!-- Today's Top Picks -->
+    <h2 class="section-heading">Today's Top Picks</h2>
+    <div class="book-grid">
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">Red White &amp; Royal Blue</span>
+          <span class="book-author">Casey McQuiston</span>
+          <span class="book-price">300 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">Interview with the Vampire</span>
+          <span class="book-author">Anne Rice</span>
+          <span class="book-price">275 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">In Memoriam</span>
+          <span class="book-author">Alice Winn</span>
+          <span class="book-price">400 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">Swimming in the Dark</span>
+          <span class="book-author">Tomasz Jedrowski</span>
+          <span class="book-price">300 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">Giovanni's Room</span>
+          <span class="book-author">James Baldwin</span>
+          <span class="book-price">295 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">เพียงชั่วเสียงพิณ</span>
+          <span class="book-author">ซามูเอล</span>
+          <span class="book-price">350 baht</span>
+        </div>
+      </div>
+
+    </div><!-- /top picks grid -->
+
+    <div class="section-divider"></div>
+
+    <!-- All Books -->
+    <h2 class="section-heading">All books</h2>
+    <div class="book-grid">
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">The Lord of the Rings</span>
+          <span class="book-author">J.R.R. Tolkien</span>
+          <span class="book-price">400 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">Percy Jackson and the Olympians</span>
+          <span class="book-author">Rick Riordan</span>
+          <span class="book-price">400 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">Carmilla</span>
+          <span class="book-author">J. Sheridan Le Fanu</span>
+          <span class="book-price">345 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">Hidden Pictures</span>
+          <span class="book-author">Jason Rekulak</span>
+          <span class="book-price">315 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">The Outsider</span>
+          <span class="book-author">Stephen King</span>
+          <span class="book-price">250 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">title</span>
+          <span class="book-author">Frank Herbert</span>
+          <span class="book-price">395 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">title</span>
+          <span class="book-author">George R.R. Martin</span>
+          <span class="book-price">250 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">title</span>
+          <span class="book-author">Rachel Reid</span>
+          <span class="book-price">300 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">title</span>
+          <span class="book-author">George Orwell</span>
+          <span class="book-price">200 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">title</span>
+          <span class="book-author">Suzanne Collins</span>
+          <span class="book-price">245 baht</span>
+        </div>
+      </div>
+
+    </div><!-- /all books grid -->
+
+  </main>
+
+</body>
+</html>

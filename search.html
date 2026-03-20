@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NaiRarm — Search</title>
+  <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="./css/main.css" rel="stylesheet" />
+  <style>
+    /* search-specific */
+    main {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 56px 48px 80px;
+    }
+    .search-banner {
+      background: var(--navy-deep);
+      padding: 36px 48px 32px;
+      border-bottom: 1px solid rgba(255,244,183,.1);
+    }
+    .search-banner-title {
+      font-family: 'Gamja Flower', cursive;
+      font-size: 48px;
+      color: var(--cream);
+      margin-bottom: 24px;
+    }
+    .search-fields {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    .search-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      min-width: 180px;
+    }
+    .search-field label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--cream);
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+    .search-field input,
+    .search-field select {
+      height: 48px;
+      padding: 0 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,244,183,.2);
+      background: rgba(255,252,252,.08);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color .2s, background .2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .search-field input::placeholder { color: rgba(255,255,255,.35); }
+    .search-field input:focus,
+    .search-field select:focus { border-color: var(--cream); background: rgba(255,252,252,.13); }
+    .select-wrapper { position: relative; }
+    .select-wrapper::after {
+      content: '▾';
+      position: absolute;
+      right: 18px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--cream);
+      pointer-events: none;
+      font-size: 14px;
+    }
+    .select-wrapper select { width: 100%; padding-right: 40px; cursor: pointer; }
+    .select-wrapper select option { background: var(--navy-deep); color: var(--white); }
+    .search-btn {
+      height: 48px;
+      padding: 0 32px;
+      background: var(--cream);
+      color: #111;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .search-btn:hover { background: var(--cream-dim); transform: translateY(-1px); }
+    .results-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 28px; }
+    .results-label { font-family: 'Gamja Flower', cursive; font-size: 56px; color: var(--cream); line-height: 1; }
+    .results-tag {
+      display: inline-block;
+      padding: 4px 14px;
+      background: var(--teal);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: var(--radius-pill);
+    }
+    .no-results { color: rgba(231,231,231,.5); font-size: 18px; font-style: italic; text-align: center; padding: 48px 0; }
+    .book-grid .book-card:nth-child(1)  { animation-delay: .05s }
+    .book-grid .book-card:nth-child(2)  { animation-delay: .10s }
+    .book-grid .book-card:nth-child(3)  { animation-delay: .15s }
+    .book-grid .book-card:nth-child(4)  { animation-delay: .20s }
+    .book-grid .book-card:nth-child(5)  { animation-delay: .25s }
+    .book-grid .book-card:nth-child(6)  { animation-delay: .30s }
+    .book-grid .book-card:nth-child(7)  { animation-delay: .35s }
+    .book-grid .book-card:nth-child(8)  { animation-delay: .40s }
+    .book-grid .book-card:nth-child(9)  { animation-delay: .45s }
+    .book-grid .book-card:nth-child(10) { animation-delay: .50s }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <a class="logo" href="index.html">NaiRarm</a>
+  </header>
+
+  <!-- Nav -->
+  <nav>
+    <button class="nav-btn" onclick="location.href='index.html'">Home</button>
+    <button class="nav-btn active" onclick="location.href='search.html'">Browse</button>
+    <button class="nav-btn" onclick="location.href='login.html'">Admin</button>
+    <span class="nav-spacer"></span>
+    <button class="nav-btn" onclick="location.href='team.html'">Our Team</button>
+  </nav>
+
+  <!-- Search Banner -->
+  <div class="search-banner">
+    <p class="search-banner-title">Search Books</p>
+    <div class="search-fields">
+      <div class="search-field">
+        <label for="search-title">Title</label>
+        <input id="search-title" type="text" placeholder="Enter the title" />
+      </div>
+      <div class="search-field">
+        <label for="search-author">Author</label>
+        <input id="search-author" type="text" placeholder="Enter the author's name" />
+      </div>
+      <div class="search-field">
+        <label for="search-genre">Genre</label>
+        <div class="select-wrapper">
+          <select id="search-genre">
+            <option value="">All genres</option>
+            <option value="nonfiction" selected>NonFiction</option>
+            <option value="fiction">Fiction</option>
+            <option value="mystery">Mystery</option>
+            <option value="romance">Romance</option>
+            <option value="scifi">Sci-Fi</option>
+            <option value="horror">Horror</option>
+          </select>
+        </div>
+      </div>
+      <button class="search-btn" onclick="runSearch()">Search</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <main>
+    <div class="results-header">
+      <span class="results-label">Results</span>
+      <span class="results-tag" id="active-genre-tag">NonFiction</span>
+    </div>
+
+    <div class="book-grid" id="results-grid">
+
+      <div class="book-card" data-title="The Diary of a Young Girl" data-author="Anne Frank" data-genre="nonfiction">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">The Diary of a Young Girl</span>
+          <span class="book-author">Anne Frank</span>
+          <span class="book-price">250 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card" data-title="Band of Brothers" data-author="Stephen E. Ambrose" data-genre="nonfiction">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">Band of Brothers</span>
+          <span class="book-author">Stephen E. Ambrose</span>
+          <span class="book-price">245 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card" data-title="A Short History of Nearly Everything" data-author="Bill Bryson" data-genre="nonfiction">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">A Short History of Nearly Everything</span>
+          <span class="book-author">Bill Bryson</span>
+          <span class="book-price">200 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card" data-title="The Devil in the White City" data-author="Erik Larson" data-genre="nonfiction">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">The Devil in the White City</span>
+          <span class="book-author">Erik Larson</span>
+          <span class="book-price">250 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card" data-title="Killers of the Flower Moon" data-author="David Grann" data-genre="nonfiction">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">Killers of the Flower Moon</span>
+          <span class="book-author">David Grann</span>
+          <span class="book-price">245 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card" data-title="Invisible Women" data-author="Caroline Criado Pérez" data-genre="nonfiction">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">Invisible Women</span>
+          <span class="book-author">Caroline Criado Pérez</span>
+          <span class="book-price">260 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card" data-title="I Am Malala" data-author="Malala Yousafzai" data-genre="nonfiction">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">I Am Malala</span>
+          <span class="book-author">Malala Yousafzai</span>
+          <span class="book-price">200 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card" data-title="Why We Sleep" data-author="Matthew Walker" data-genre="nonfiction">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">Why We Sleep</span>
+          <span class="book-author">Matthew Walker</span>
+          <span class="book-price">150 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card" data-title="Astrophysics for People in a Hurry" data-author="Neil deGrasse Tyson" data-genre="nonfiction">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">Astrophysics for People in a Hurry</span>
+          <span class="book-author">Neil deGrasse Tyson</span>
+          <span class="book-price">150 baht</span>
+        </div>
+      </div>
+
+      <div class="book-card" data-title="Wild" data-author="Cheryl Strayed" data-genre="nonfiction">
+        <div class="book-cover">Book Cover</div>
+        <div class="book-info">
+          <span class="book-title">Wild</span>
+          <span class="book-author">Cheryl Strayed</span>
+          <span class="book-price">230 baht</span>
+        </div>
+      </div>
+
+    </div><!-- /book-grid -->
+
+    <p class="no-results" id="no-results" style="display:none;">No books found matching your search.</p>
+
+  </main>
+
+  <script>
+    function runSearch() {
+      const titleQ  = document.getElementById('search-title').value.trim().toLowerCase();
+      const authorQ = document.getElementById('search-author').value.trim().toLowerCase();
+      const genreQ  = document.getElementById('search-genre').value;
+      const tag     = document.getElementById('active-genre-tag');
+      const noRes   = document.getElementById('no-results');
+
+      // Update the genre tag
+      const genreLabel = document.getElementById('search-genre').options[document.getElementById('search-genre').selectedIndex].text;
+      tag.textContent = genreQ ? genreLabel : 'All';
+      tag.style.display = '';
+
+      let visibleCount = 0;
+
+      document.querySelectorAll('#results-grid .book-card').forEach(card => {
+        const title  = card.dataset.title.toLowerCase();
+        const author = card.dataset.author.toLowerCase();
+        const genre  = card.dataset.genre;
+
+        const matchTitle  = !titleQ  || title.includes(titleQ);
+        const matchAuthor = !authorQ || author.includes(authorQ);
+        const matchGenre  = !genreQ  || genre === genreQ;
+
+        if (matchTitle && matchAuthor && matchGenre) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      noRes.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    // Also allow pressing Enter in any input field to trigger search
+    document.querySelectorAll('.search-field input').forEach(input => {
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') runSearch(); });
+    });
+  </script>
+
+</body>
+</html>

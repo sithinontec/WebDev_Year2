@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NaiRarm — The Song of Achilles</title>
+  <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="./css/main.css" rel="stylesheet" />
+  <style>
+    /* detail-specific */
+    .detail-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 56px 48px 80px;
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+    .detail-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      position: sticky;
+      top: 152px;
+    }
+    .detail-cover {
+      width: 100%;
+      aspect-ratio: 2/3;
+      background: rgba(217,217,217,.18);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: rgba(255,255,255,.35);
+      font-style: italic;
+      position: relative;
+      box-shadow: 0 24px 60px rgba(0,0,0,.5);
+      border: 1px solid rgba(255,244,183,.08);
+    }
+    .detail-cover::before {
+      content: '';
+      position: absolute;
+      left: 15%; top: 0; bottom: 0;
+      width: 3px;
+      background: rgba(255,255,255,.07);
+      border-radius: 2px;
+    }
+    .detail-cover img { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; }
+    .detail-isbn { font-size: 13px; color: rgba(231,231,231,.4); letter-spacing: .4px; }
+    .detail-right { display: flex; flex-direction: column; gap: 20px; padding-top: 8px; }
+    .detail-title { font-family: 'Lora', serif; font-size: 48px; font-weight: 600; color: var(--cream); line-height: 1.15; }
+    .detail-author { font-family: 'Lora', serif; font-style: italic; font-size: 22px; color: rgba(231,231,231,.7); margin-top: -8px; }
+    .detail-genre-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 16px 0;
+      border-top: 1px solid rgba(255,244,183,.1);
+      border-bottom: 1px solid rgba(255,244,183,.1);
+    }
+    .detail-genre-label { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; color: rgba(231,231,231,.45); flex-shrink: 0; }
+    .detail-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .detail-tag {
+      display: inline-block;
+      padding: 5px 14px;
+      background: rgba(255,244,183,.12);
+      color: var(--cream);
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,244,183,.25);
+      transition: background .2s;
+    }
+    .detail-tag:hover { background: rgba(255,244,183,.2); }
+    .detail-synopsis { font-size: 16px; line-height: 1.8; color: rgba(231,231,231,.8); font-weight: 300; }
+    .detail-footer { margin-top: 12px; }
+    .detail-price-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 60px;
+      padding: 0 48px;
+      background: var(--teal);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 22px;
+      font-weight: 500;
+      border: none;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(0,106,103,.4);
+    }
+    .detail-price-btn:hover { background: var(--teal-light); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,106,103,.5); }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <a class="logo" href="index.html">NaiRarm</a>
+  </header>
+
+  <!-- Nav -->
+  <nav>
+    <button class="nav-btn" onclick="location.href='index.html'">Home</button>
+    <button class="nav-btn" onclick="location.href='search.html'">Browse</button>
+    <button class="nav-btn" onclick="location.href='login.html'">Admin</button>
+    <span class="nav-spacer"></span>
+    <button class="nav-btn" onclick="location.href='team.html'">Our Team</button>
+  </nav>
+
+  <!-- Book Detail -->
+  <main class="detail-main">
+
+    <!-- Left column: cover -->
+    <div class="detail-left">
+      <div class="detail-cover">Book Cover</div>
+      <p class="detail-isbn">ISBN 9780062060624</p>
+    </div>
+
+    <!-- Right column: info -->
+    <div class="detail-right">
+      <h1 class="detail-title">The Song Of Achilles</h1>
+      <p class="detail-author">Madeline Miller</p>
+
+      <div class="detail-genre-row">
+        <span class="detail-genre-label">Genre</span>
+        <div class="detail-tags">
+          <span class="detail-tag">Fantasy</span>
+          <span class="detail-tag">Historical Fiction</span>
+          <span class="detail-tag">Romance</span>
+          <span class="detail-tag">Mythology</span>
+          <span class="detail-tag">LGBT</span>
+        </div>
+      </div>
+
+      <p class="detail-synopsis">
+        Achilles, "the best of all the Greeks," son of the cruel sea goddess Thetis and the legendary king Peleus, is strong, swift, and beautiful, irresistible to all who meet him. Patroclus is an awkward young prince, exiled from his homeland after an act of shocking violence. Brought together by chance, they forge an inseparable bond, despite risking the gods' wrath.
+        <br><br>
+        They are trained by the centaur Chiron in the arts of war and medicine, but when word comes that Helen of Sparta has been kidnapped, all the heroes of Greece are called upon to lay siege to Troy in her name. Seduced by the promise of a glorious destiny, Achilles joins their cause, and torn between love and fear for his friend, Patroclus follows. Little do they know that the cruel Fates will test them both as never before and demand a terrible sacrifice.
+      </p>
+
+      <div class="detail-footer">
+        <button class="detail-price-btn">300 baht</button>
+      </div>
+    </div>
+
+  </main>
+
+</body>
+</html>
