@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NaiRarm — The Song of Achilles</title>
+  <title>NaiRarm — Book Details</title>
   <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="./css/main.css" rel="stylesheet" />
   <style>
@@ -17,6 +17,28 @@
       gap: 64px;
       align-items: start;
     }
+    
+    /* Back button */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: rgba(217,217,217,.1);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius-pill);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      margin-bottom: 24px;
+    }
+    .back-btn:hover {
+      background: rgba(217,217,217,.2);
+      transform: translateX(-4px);
+    }
+    
     .detail-left {
       display: flex;
       flex-direction: column;
@@ -39,6 +61,7 @@
       position: relative;
       box-shadow: 0 24px 60px rgba(0,0,0,.5);
       border: 1px solid rgba(255,244,183,.08);
+      overflow: hidden;
     }
     .detail-cover::before {
       content: '';
@@ -48,7 +71,12 @@
       background: rgba(255,255,255,.07);
       border-radius: 2px;
     }
-    .detail-cover img { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; }
+    .detail-cover img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      border-radius: 20px; 
+    }
     .detail-isbn { font-size: 13px; color: rgba(231,231,231,.4); letter-spacing: .4px; }
     .detail-right { display: flex; flex-direction: column; gap: 20px; padding-top: 8px; }
     .detail-title { font-family: 'Lora', serif; font-size: 48px; font-weight: 600; color: var(--cream); line-height: 1.15; }
@@ -74,8 +102,35 @@
       border-radius: var(--radius-pill);
       border: 1px solid rgba(255,244,183,.25);
       transition: background .2s;
+      text-transform: capitalize;
     }
     .detail-tag:hover { background: rgba(255,244,183,.2); }
+    
+    /* Additional info section */
+    .detail-meta {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255,244,183,.1);
+    }
+    .detail-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .detail-meta-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: rgba(231,231,231,.4);
+    }
+    .detail-meta-value {
+      font-size: 15px;
+      color: rgba(231,231,231,.8);
+    }
+    
     .detail-synopsis { font-size: 16px; line-height: 1.8; color: rgba(231,231,231,.8); font-weight: 300; }
     .detail-footer { margin-top: 12px; }
     .detail-price-btn {
@@ -96,10 +151,40 @@
       box-shadow: 0 4px 20px rgba(0,106,103,.4);
     }
     .detail-price-btn:hover { background: var(--teal-light); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,106,103,.5); }
+    
+    /* Loading and error states */
+    .loading-state {
+      text-align: center;
+      padding: 80px 48px;
+      color: var(--cream);
+      font-size: 18px;
+    }
+    .error-state {
+      text-align: center;
+      padding: 80px 48px;
+      color: #f87171;
+      font-size: 18px;
+    }
+    .error-state a {
+      color: var(--cream);
+      text-decoration: underline;
+    }
+    
+    /* Responsive */
+    @media (max-width: 900px) {
+      .detail-main {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .detail-left {
+        position: static;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+    }
   </style>
 </head>
 <body>
-
   <!-- Header -->
   <header>
     <a class="logo" href="index.html">NaiRarm</a>
@@ -114,43 +199,208 @@
     <button class="nav-btn" onclick="location.href='team.html'">Our Team</button>
   </nav>
 
-  <!-- Book Detail -->
-  <main class="detail-main">
+  <!-- Loading State -->
+  <div class="loading-state" id="loading">
+    Loading book details...
+  </div>
 
-    <!-- Left column: cover -->
-    <div class="detail-left">
-      <div class="detail-cover">Book Cover</div>
-      <p class="detail-isbn">ISBN 9780062060624</p>
+  <!-- Error State -->
+  <div class="error-state" id="error" style="display:none;">
+    Book not found. <a href="search.html">Return to search</a>
+  </div>
+
+  <!-- Book Detail (hidden until loaded) -->
+  <main class="detail-main" id="detail-content" style="display:none;">
+    <!-- Back button -->
+    <div style="grid-column: 1 / -1;">
+      <button class="back-btn" onclick="goBack()">
+        ← Back to results
+      </button>
     </div>
+    
+    <!-- Left column: cover -->
+    <aside class="detail-left">
+      <div class="detail-cover" id="cover-container">
+        <span>Book Cover</span>
+      </div>
+      <p class="detail-isbn" id="detail-isbn">ISBN Loading...</p>
+    </aside>
 
     <!-- Right column: info -->
-    <div class="detail-right">
-      <h1 class="detail-title">The Song Of Achilles</h1>
-      <p class="detail-author">Madeline Miller</p>
-
+    <article class="detail-right">
+      <h1 class="detail-title" id="detail-title">Loading...</h1>
+      <p class="detail-author" id="detail-author">Loading...</p>
+      
       <div class="detail-genre-row">
         <span class="detail-genre-label">Genre</span>
-        <div class="detail-tags">
-          <span class="detail-tag">Fantasy</span>
-          <span class="detail-tag">Historical Fiction</span>
-          <span class="detail-tag">Romance</span>
-          <span class="detail-tag">Mythology</span>
-          <span class="detail-tag">LGBT</span>
+        <div class="detail-tags" id="detail-tags">
+          <span class="detail-tag">Loading...</span>
         </div>
       </div>
-
-      <p class="detail-synopsis">
-        Achilles, "the best of all the Greeks," son of the cruel sea goddess Thetis and the legendary king Peleus, is strong, swift, and beautiful, irresistible to all who meet him. Patroclus is an awkward young prince, exiled from his homeland after an act of shocking violence. Brought together by chance, they forge an inseparable bond, despite risking the gods' wrath.
-        <br><br>
-        They are trained by the centaur Chiron in the arts of war and medicine, but when word comes that Helen of Sparta has been kidnapped, all the heroes of Greece are called upon to lay siege to Troy in her name. Seduced by the promise of a glorious destiny, Achilles joins their cause, and torn between love and fear for his friend, Patroclus follows. Little do they know that the cruel Fates will test them both as never before and demand a terrible sacrifice.
-      </p>
-
-      <div class="detail-footer">
-        <button class="detail-price-btn">300 baht</button>
+      
+      <!-- Additional metadata -->
+      <div class="detail-meta">
+        <div class="detail-meta-item">
+          <span class="detail-meta-label">Publisher</span>
+          <span class="detail-meta-value" id="detail-publisher">—</span>
+        </div>
+        <div class="detail-meta-item">
+          <span class="detail-meta-label">Publication Date</span>
+          <span class="detail-meta-value" id="detail-pubdate">—</span>
+        </div>
       </div>
-    </div>
-
+      
+      <p class="detail-synopsis" id="detail-synopsis">Loading synopsis...</p>
+      
+      <footer class="detail-footer">
+        <button class="detail-price-btn" id="detail-price">— baht</button>
+      </footer>
+    </article>
   </main>
 
+  <script>
+    // ============================================
+    // API Configuration
+    // ============================================
+    
+    // Backend API URL - update this to match your backend server
+    const API_BASE_URL = 'http://localhost:3000/api';
+    
+    // ============================================
+    // Page Initialization
+    // ============================================
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      loadBookDetail();
+    });
+    
+    // ============================================
+    // Load Book Details from API
+    // ============================================
+    
+    async function loadBookDetail() {
+      const loadingEl = document.getElementById('loading');
+      const errorEl = document.getElementById('error');
+      const contentEl = document.getElementById('detail-content');
+      
+      // Get book ID from URL parameters
+      const params = new URLSearchParams(window.location.search);
+      const bookId = params.get('id');
+      
+      // Check if book ID is provided
+      if (!bookId) {
+        loadingEl.style.display = 'none';
+        errorEl.innerHTML = 'No book selected. <a href="search.html">Browse books</a>';
+        errorEl.style.display = 'block';
+        return;
+      }
+      
+      try {
+        // Fetch book details from API
+        const response = await fetch(`${API_BASE_URL}/books/${bookId}`);
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          // Populate page with book data
+          populateBookDetails(result.data);
+          
+          // Update page title
+          document.title = `NaiRarm — ${result.data.title}`;
+          
+          // Show content, hide loading
+          loadingEl.style.display = 'none';
+          contentEl.style.display = 'grid';
+        } else {
+          // Book not found
+          loadingEl.style.display = 'none';
+          errorEl.style.display = 'block';
+        }
+        
+      } catch (error) {
+        console.error('Error loading book:', error);
+        loadingEl.style.display = 'none';
+        errorEl.innerHTML = 'Error loading book details. Please check if the backend server is running. <a href="search.html">Return to search</a>';
+        errorEl.style.display = 'block';
+      }
+    }
+    
+    // ============================================
+    // Populate Book Details on Page
+    // ============================================
+    
+    function populateBookDetails(book) {
+      // Title and author
+      document.getElementById('detail-title').textContent = book.title;
+      document.getElementById('detail-author').textContent = book.author;
+      
+      // ISBN
+      document.getElementById('detail-isbn').textContent = `ISBN ${book.isbn}`;
+      
+      // Cover image
+      const coverContainer = document.getElementById('cover-container');
+      if (book.cover_url) {
+        coverContainer.innerHTML = `
+          <img src="${book.cover_url}" 
+               alt="${escapeHtml(book.title)} cover" 
+               onerror="this.parentElement.innerHTML='<span>Book Cover</span>'" />
+        `;
+      }
+      
+      // Genre tags
+      const tagsContainer = document.getElementById('detail-tags');
+      tagsContainer.innerHTML = `<span class="detail-tag">${escapeHtml(book.genre)}</span>`;
+      
+      // Publisher and publication date
+      document.getElementById('detail-publisher').textContent = book.publisher || '—';
+      document.getElementById('detail-pubdate').textContent = formatDate(book.pub_date) || '—';
+      
+      // Synopsis
+      document.getElementById('detail-synopsis').textContent = book.synopsis || 'No synopsis available.';
+      
+      // Price button
+      document.getElementById('detail-price').textContent = `${book.price} baht`;
+    }
+    
+    // ============================================
+    // Navigation: Go Back to Previous Page
+    // ============================================
+    
+    function goBack() {
+      // Check if there's history to go back to
+      if (document.referrer && document.referrer.includes('search.html')) {
+        history.back();
+      } else {
+        // Otherwise, go to search page
+        window.location.href = 'search.html';
+      }
+    }
+    
+    // ============================================
+    // Utility Functions
+    // ============================================
+    
+    // Escape HTML to prevent XSS attacks
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    // Format date for display
+    function formatDate(dateString) {
+      if (!dateString) return null;
+      try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      } catch {
+        return dateString;
+      }
+    }
+  </script>
 </body>
 </html>

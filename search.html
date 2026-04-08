@@ -102,20 +102,53 @@
       border-radius: var(--radius-pill);
     }
     .no-results { color: rgba(231,231,231,.5); font-size: 18px; font-style: italic; text-align: center; padding: 48px 0; }
-    .book-grid .book-card:nth-child(1)  { animation-delay: .05s }
-    .book-grid .book-card:nth-child(2)  { animation-delay: .10s }
-    .book-grid .book-card:nth-child(3)  { animation-delay: .15s }
-    .book-grid .book-card:nth-child(4)  { animation-delay: .20s }
-    .book-grid .book-card:nth-child(5)  { animation-delay: .25s }
-    .book-grid .book-card:nth-child(6)  { animation-delay: .30s }
-    .book-grid .book-card:nth-child(7)  { animation-delay: .35s }
-    .book-grid .book-card:nth-child(8)  { animation-delay: .40s }
-    .book-grid .book-card:nth-child(9)  { animation-delay: .45s }
+    .loading { color: var(--cream); text-align: center; padding: 48px 0; font-size: 18px; }
+    
+    /* Book card clickable styles */
+    .book-card {
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .book-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,.4);
+    }
+    
+    /* Book cover with image */
+    .book-cover {
+      position: relative;
+      overflow: hidden;
+    }
+    .book-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+    }
+    .book-cover .placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      font-size: 14px;
+      color: rgba(255,255,255,.35);
+      font-style: italic;
+    }
+    
+    /* Animation delays for cards */
+    .book-grid .book-card:nth-child(1) { animation-delay: .05s }
+    .book-grid .book-card:nth-child(2) { animation-delay: .10s }
+    .book-grid .book-card:nth-child(3) { animation-delay: .15s }
+    .book-grid .book-card:nth-child(4) { animation-delay: .20s }
+    .book-grid .book-card:nth-child(5) { animation-delay: .25s }
+    .book-grid .book-card:nth-child(6) { animation-delay: .30s }
+    .book-grid .book-card:nth-child(7) { animation-delay: .35s }
+    .book-grid .book-card:nth-child(8) { animation-delay: .40s }
+    .book-grid .book-card:nth-child(9) { animation-delay: .45s }
     .book-grid .book-card:nth-child(10) { animation-delay: .50s }
   </style>
 </head>
 <body>
-
   <!-- Header -->
   <header>
     <a class="logo" href="index.html">NaiRarm</a>
@@ -131,7 +164,7 @@
   </nav>
 
   <!-- Search Banner -->
-  <div class="search-banner">
+  <section class="search-banner">
     <p class="search-banner-title">Search Books</p>
     <div class="search-fields">
       <div class="search-field">
@@ -147,7 +180,7 @@
         <div class="select-wrapper">
           <select id="search-genre">
             <option value="">All genres</option>
-            <option value="nonfiction" selected>NonFiction</option>
+            <option value="nonfiction">NonFiction</option>
             <option value="fiction">Fiction</option>
             <option value="mystery">Mystery</option>
             <option value="romance">Romance</option>
@@ -158,153 +191,151 @@
       </div>
       <button class="search-btn" onclick="runSearch()">Search</button>
     </div>
-  </div>
+  </section>
 
   <!-- Results -->
   <main>
     <div class="results-header">
       <span class="results-label">Results</span>
-      <span class="results-tag" id="active-genre-tag">NonFiction</span>
+      <span class="results-tag" id="active-genre-tag">All</span>
     </div>
-
-    <div class="book-grid" id="results-grid">
-
-      <div class="book-card" data-title="The Diary of a Young Girl" data-author="Anne Frank" data-genre="nonfiction">
-        <div class="book-cover">Book Cover</div>
-        <div class="book-info">
-          <span class="book-title">The Diary of a Young Girl</span>
-          <span class="book-author">Anne Frank</span>
-          <span class="book-price">250 baht</span>
-        </div>
-      </div>
-
-      <div class="book-card" data-title="Band of Brothers" data-author="Stephen E. Ambrose" data-genre="nonfiction">
-        <div class="book-cover">Book Cover</div>
-        <div class="book-info">
-          <span class="book-title">Band of Brothers</span>
-          <span class="book-author">Stephen E. Ambrose</span>
-          <span class="book-price">245 baht</span>
-        </div>
-      </div>
-
-      <div class="book-card" data-title="A Short History of Nearly Everything" data-author="Bill Bryson" data-genre="nonfiction">
-        <div class="book-cover">Book Cover</div>
-        <div class="book-info">
-          <span class="book-title">A Short History of Nearly Everything</span>
-          <span class="book-author">Bill Bryson</span>
-          <span class="book-price">200 baht</span>
-        </div>
-      </div>
-
-      <div class="book-card" data-title="The Devil in the White City" data-author="Erik Larson" data-genre="nonfiction">
-        <div class="book-cover">Book Cover</div>
-        <div class="book-info">
-          <span class="book-title">The Devil in the White City</span>
-          <span class="book-author">Erik Larson</span>
-          <span class="book-price">250 baht</span>
-        </div>
-      </div>
-
-      <div class="book-card" data-title="Killers of the Flower Moon" data-author="David Grann" data-genre="nonfiction">
-        <div class="book-cover">Book Cover</div>
-        <div class="book-info">
-          <span class="book-title">Killers of the Flower Moon</span>
-          <span class="book-author">David Grann</span>
-          <span class="book-price">245 baht</span>
-        </div>
-      </div>
-
-      <div class="book-card" data-title="Invisible Women" data-author="Caroline Criado Pérez" data-genre="nonfiction">
-        <div class="book-cover">Book Cover</div>
-        <div class="book-info">
-          <span class="book-title">Invisible Women</span>
-          <span class="book-author">Caroline Criado Pérez</span>
-          <span class="book-price">260 baht</span>
-        </div>
-      </div>
-
-      <div class="book-card" data-title="I Am Malala" data-author="Malala Yousafzai" data-genre="nonfiction">
-        <div class="book-cover">Book Cover</div>
-        <div class="book-info">
-          <span class="book-title">I Am Malala</span>
-          <span class="book-author">Malala Yousafzai</span>
-          <span class="book-price">200 baht</span>
-        </div>
-      </div>
-
-      <div class="book-card" data-title="Why We Sleep" data-author="Matthew Walker" data-genre="nonfiction">
-        <div class="book-cover">Book Cover</div>
-        <div class="book-info">
-          <span class="book-title">Why We Sleep</span>
-          <span class="book-author">Matthew Walker</span>
-          <span class="book-price">150 baht</span>
-        </div>
-      </div>
-
-      <div class="book-card" data-title="Astrophysics for People in a Hurry" data-author="Neil deGrasse Tyson" data-genre="nonfiction">
-        <div class="book-cover">Book Cover</div>
-        <div class="book-info">
-          <span class="book-title">Astrophysics for People in a Hurry</span>
-          <span class="book-author">Neil deGrasse Tyson</span>
-          <span class="book-price">150 baht</span>
-        </div>
-      </div>
-
-      <div class="book-card" data-title="Wild" data-author="Cheryl Strayed" data-genre="nonfiction">
-        <div class="book-cover">Book Cover</div>
-        <div class="book-info">
-          <span class="book-title">Wild</span>
-          <span class="book-author">Cheryl Strayed</span>
-          <span class="book-price">230 baht</span>
-        </div>
-      </div>
-
-    </div><!-- /book-grid -->
-
+    
+    <!-- Loading indicator -->
+    <p class="loading" id="loading" style="display:none;">Loading books...</p>
+    
+    <!-- Book grid populated by JavaScript -->
+    <article class="book-grid" id="results-grid">
+      <!-- Books will be inserted here by JavaScript -->
+    </article>
+    
+    <!-- No results message -->
     <p class="no-results" id="no-results" style="display:none;">No books found matching your search.</p>
-
   </main>
 
   <script>
-    function runSearch() {
-      const titleQ  = document.getElementById('search-title').value.trim().toLowerCase();
-      const authorQ = document.getElementById('search-author').value.trim().toLowerCase();
-      const genreQ  = document.getElementById('search-genre').value;
-      const tag     = document.getElementById('active-genre-tag');
-      const noRes   = document.getElementById('no-results');
-
-      // Update the genre tag
-      const genreLabel = document.getElementById('search-genre').options[document.getElementById('search-genre').selectedIndex].text;
+    // ============================================
+    // API Configuration
+    // ============================================
+    
+    // Backend API URL - update this to match your backend server
+    const API_BASE_URL = 'http://localhost:3000/api';
+    
+    // ============================================
+    // Page Initialization
+    // ============================================
+    
+    // Load all books when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      runSearch();
+    });
+    
+    // ============================================
+    // Search Function - Fetches books from API
+    // ============================================
+    
+    async function runSearch() {
+      const titleQ = document.getElementById('search-title').value.trim();
+      const authorQ = document.getElementById('search-author').value.trim();
+      const genreQ = document.getElementById('search-genre').value;
+      
+      const tag = document.getElementById('active-genre-tag');
+      const grid = document.getElementById('results-grid');
+      const noRes = document.getElementById('no-results');
+      const loading = document.getElementById('loading');
+      
+      // Update the genre tag display
+      const genreLabel = document.getElementById('search-genre')
+        .options[document.getElementById('search-genre').selectedIndex].text;
       tag.textContent = genreQ ? genreLabel : 'All';
-      tag.style.display = '';
-
-      let visibleCount = 0;
-
-      document.querySelectorAll('#results-grid .book-card').forEach(card => {
-        const title  = card.dataset.title.toLowerCase();
-        const author = card.dataset.author.toLowerCase();
-        const genre  = card.dataset.genre;
-
-        const matchTitle  = !titleQ  || title.includes(titleQ);
-        const matchAuthor = !authorQ || author.includes(authorQ);
-        const matchGenre  = !genreQ  || genre === genreQ;
-
-        if (matchTitle && matchAuthor && matchGenre) {
-          card.style.display = '';
-          visibleCount++;
+      
+      // Show loading, hide results
+      loading.style.display = 'block';
+      grid.innerHTML = '';
+      noRes.style.display = 'none';
+      
+      try {
+        // Build query string with search criteria
+        const params = new URLSearchParams();
+        if (titleQ) params.append('title', titleQ);
+        if (authorQ) params.append('author', authorQ);
+        if (genreQ) params.append('genre', genreQ);
+        
+        // Fetch books from API
+        const response = await fetch(`${API_BASE_URL}/books?${params.toString()}`);
+        const result = await response.json();
+        
+        // Hide loading
+        loading.style.display = 'none';
+        
+        if (result.success && result.data.length > 0) {
+          // Render book cards
+          renderBooks(result.data);
+          noRes.style.display = 'none';
         } else {
-          card.style.display = 'none';
+          // No results found
+          noRes.style.display = 'block';
         }
-      });
-
-      noRes.style.display = visibleCount === 0 ? 'block' : 'none';
+        
+      } catch (error) {
+        console.error('Search error:', error);
+        loading.style.display = 'none';
+        noRes.textContent = 'Error loading books. Please check if the backend server is running.';
+        noRes.style.display = 'block';
+      }
     }
-
-    // Also allow pressing Enter in any input field to trigger search
+    
+    // ============================================
+    // Render Books - Creates book card HTML
+    // ============================================
+    
+    function renderBooks(books) {
+      const grid = document.getElementById('results-grid');
+      
+      grid.innerHTML = books.map(book => `
+        <article class="book-card" onclick="goToDetail(${book.id})" title="Click to view details">
+          <div class="book-cover">
+            ${book.cover_url 
+              ? `<img src="${book.cover_url}" alt="${book.title} cover" onerror="this.parentElement.innerHTML='<span class=placeholder>Book Cover</span>'" />`
+              : '<span class="placeholder">Book Cover</span>'
+            }
+          </div>
+          <div class="book-info">
+            <span class="book-title">${escapeHtml(book.title)}</span>
+            <span class="book-author">${escapeHtml(book.author)}</span>
+            <span class="book-price">${book.price} baht</span>
+          </div>
+        </article>
+      `).join('');
+    }
+    
+    // ============================================
+    // Navigate to Detail Page
+    // ============================================
+    
+    function goToDetail(bookId) {
+      // Navigate to detail page with book ID as URL parameter
+      window.location.href = `detail.html?id=${bookId}`;
+    }
+    
+    // ============================================
+    // Utility: Escape HTML to prevent XSS
+    // ============================================
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    // ============================================
+    // Allow Enter key to trigger search
+    // ============================================
+    
     document.querySelectorAll('.search-field input').forEach(input => {
-      input.addEventListener('keydown', e => { if (e.key === 'Enter') runSearch(); });
+      input.addEventListener('keydown', e => { 
+        if (e.key === 'Enter') runSearch(); 
+      });
     });
   </script>
-
 </body>
 </html>
