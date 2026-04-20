@@ -140,24 +140,37 @@
       }
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
       const username = document.getElementById('login-username').value.trim();
       const password = document.getElementById('login-password').value;
       const errorEl  = document.getElementById('login-error');
+
+      errorEl.style.color = '#f87171';
 
       if (!username || !password) {
         errorEl.textContent = 'Please fill in both fields.';
         return;
       }
 
-      // Placeholder: replace with real auth logic
-      if (username === 'Ludwighandsome' && password === '12345678') {
-        errorEl.style.color = 'var(--teal-light)';
-        errorEl.textContent = 'Login successful! Redirecting…';
-        setTimeout(() => location.href = 'admin.html', 1000);
-      } else {
-        errorEl.style.color = '#f87171';
-        errorEl.textContent = 'Incorrect username or password.';
+      try {
+        const resp = await fetch('http://localhost:3000/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await resp.json();
+
+        if (resp.ok && data.success) {
+          errorEl.style.color = 'var(--teal-light)';
+          errorEl.textContent = 'Login successful! Redirecting…';
+          setTimeout(() => location.href = 'admin.html', 800);
+        } else {
+          errorEl.textContent = data.message || 'Incorrect username or password.';
+        }
+      } catch (err) {
+        console.error('Login error:', err);
+        errorEl.textContent = 'Network error — please try again.';
       }
     }
 
@@ -169,7 +182,10 @@
 
     // Allow Enter key to submit
     document.addEventListener('keydown', e => {
-      if (e.key === 'Enter') handleSubmit();
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSubmit();
+      }
     });
   </script>
 

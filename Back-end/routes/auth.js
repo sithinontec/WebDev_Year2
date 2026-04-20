@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
     }
 
     // Find admin by username
-    const admin = db.getAdmin(username);
+    const admin = await db.getAdmin(username);
 
     // Check if admin exists and password matches
     // NOTE: In production, use bcrypt.compare() for hashed passwords

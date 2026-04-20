@@ -177,17 +177,7 @@
       </div>
       <div class="search-field">
         <label for="search-genre">Genre</label>
-        <div class="select-wrapper">
-          <select id="search-genre">
-            <option value="">All genres</option>
-            <option value="nonfiction">NonFiction</option>
-            <option value="fiction">Fiction</option>
-            <option value="mystery">Mystery</option>
-            <option value="romance">Romance</option>
-            <option value="scifi">Sci-Fi</option>
-            <option value="horror">Horror</option>
-          </select>
-        </div>
+        <input id="search-genre" type="text" placeholder="e.g. fiction, romance, mystery" />
       </div>
       <button class="search-btn" onclick="runSearch()">Search</button>
     </div>
@@ -236,7 +226,7 @@
     async function runSearch() {
       const titleQ = document.getElementById('search-title').value.trim();
       const authorQ = document.getElementById('search-author').value.trim();
-      const genreQ = document.getElementById('search-genre').value;
+      const genreQ = document.getElementById('search-genre').value.trim();
       
       const tag = document.getElementById('active-genre-tag');
       const grid = document.getElementById('results-grid');
@@ -244,9 +234,8 @@
       const loading = document.getElementById('loading');
       
       // Update the genre tag display
-      const genreLabel = document.getElementById('search-genre')
-        .options[document.getElementById('search-genre').selectedIndex].text;
-      tag.textContent = genreQ ? genreLabel : 'All';
+      const genreLabel = genreQ || 'All';
+      tag.textContent = genreLabel;
       
       // Show loading, hide results
       loading.style.display = 'block';
