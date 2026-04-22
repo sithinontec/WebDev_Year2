@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NaiRarm — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="./css/main.css" rel="stylesheet" />
+  <style>
+    /* admin-specific (kept compact) */
+    .admin-main { max-width: 1300px; margin: 0 auto; padding: 48px 48px 80px; }
+    .admin-panels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; align-items: start; }
+    .admin-panel { background: var(--card-bg); border: 1px solid rgba(255,244,183,.08); border-radius: 24px; padding: 28px; }
+    .admin-panel-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 600; color: var(--cream); margin-bottom: 18px; }
+    .admin-field { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+    .admin-field input, .admin-field textarea, .admin-field select { padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,.08); background:rgba(0,11,88,.4); color:var(--white); }
+    .admin-actions { display:flex; gap:8px; margin-top:8px; }
+    .admin-msg { min-height:18px; margin-top:8px; }
+
+    /* Button styles */
+    .admin-btn { padding: 8px 14px; border-radius: 12px; border: none; cursor: pointer; font-weight:600; color: var(--white); background: rgba(255,255,255,0.06); transition: transform .12s ease, box-shadow .12s ease; }
+    .admin-btn:hover { transform: translateY(-2px); }
+    .admin-btn:active { transform: translateY(0); }
+    .admin-btn-submit { background: linear-gradient(90deg,#10b981,#059669); box-shadow: 0 6px 18px rgba(6,95,70,.18); }
+    .admin-btn-clear { background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06); color: rgba(231,231,231,.9); }
+    .admin-btn-danger { background: linear-gradient(90deg,#ef4444,#dc2626); box-shadow: 0 6px 18px rgba(220,38,38,.16); }
+    .admin-field input[list] { background-image:none; }
+  </style>
+</head>
+<body>
+  <header><a class="logo" href="index.html">NaiRarm</a></header>
+  <nav>
+    <button class="nav-btn" onclick="location.href='index.html'">Home</button>
+    <button class="nav-btn" onclick="location.href='search.html'">Browse</button>
+    <button class="nav-btn active" onclick="location.href='login.html'">Admin</button>
+    <span class="nav-spacer"></span>
+    <button class="nav-btn" onclick="location.href='team.html'">Our Team</button>
+  </nav>
+
+  <main class="admin-main">
+    <h1 class="section-heading">Administrator</h1>
+    <div class="admin-panels">
+
+      <!-- Add -->
+      <section class="admin-panel">
+        <h2 class="admin-panel-title">Add new book</h2>
+        <div id="add-form">
+          <div class="admin-field"><label>Title</label><input id="add-title" /></div>
+          <div class="admin-field"><label>ISBN</label><input id="add-isbn" /></div>
+          <div class="admin-field"><label>Author</label><input id="add-author" /></div>
+          <div class="admin-field"><label>Price</label><input id="add-price" type="number" min="0" /></div>
+          <div class="admin-field"><label>Genre</label><input id="add-genre" /></div>
+          <div class="admin-field"><label>Publisher</label><input id="add-publisher" /></div>
+          <div class="admin-field"><label>Publication date</label><input id="add-pubdate" type="date" /></div>
+          <div class="admin-field"><label>Synopsis</label><textarea id="add-synopsis" rows="3"></textarea></div>
+          <div class="admin-actions">
+            <button class="admin-btn admin-btn-submit" onclick="handleAdd()">Submit</button>
+            <button class="admin-btn admin-btn-clear" onclick="clearForm('add-form','add-msg')">Clear</button>
+          </div>
+          <div class="admin-msg" id="add-msg"></div>
+        </div>
+      </section>
+
+      <!-- Edit -->
+      <section class="admin-panel">
+        <h2 class="admin-panel-title">Edit existing book</h2>
+        <div class="admin-field"><label>Search (ISBN or title)</label><input id="edit-query" list="edit-suggestions" placeholder="ISBN or book title" /><datalist id="edit-suggestions"></datalist></div>
+        <div class="admin-actions"><button class="admin-btn admin-btn-submit" onclick="handleEditSearch()">Search</button></div>
+        <div id="edit-form">
+          <div class="admin-field"><label>Title</label><input id="edit-title" /></div>
+          <div class="admin-field"><label>ISBN</label><input id="edit-isbn_field" /></div>
+          <div class="admin-field"><label>Author</label><input id="edit-author" /></div>
+          <div class="admin-field"><label>Price</label><input id="edit-price" type="number" min="0" /></div>
+          <div class="admin-field"><label>Genre</label><input id="edit-genre" /></div>
+          <div class="admin-field"><label>Publisher</label><input id="edit-publisher" /></div>
+          <div class="admin-field"><label>Publication date</label><input id="edit-pubdate" type="date" /></div>
+          <div class="admin-field"><label>Synopsis</label><textarea id="edit-synopsis" rows="3"></textarea></div>
+          <div class="admin-actions">
+            <button class="admin-btn admin-btn-submit" onclick="handleEdit()">Submit</button>
+            <button class="admin-btn admin-btn-clear" onclick="clearForm('edit-form','edit-msg')">Clear</button>
+          </div>
+          <div class="admin-msg" id="edit-msg"></div>
+        </div>
+      </section>
+
+      <!-- Delete -->
+      <section class="admin-panel" style="border-color:rgba(248,113,113,.15)">
+        <h2 class="admin-panel-title">Delete book</h2>
+        <div class="admin-field"><label>Search (ISBN or title)</label><input id="delete-query" list="delete-suggestions" placeholder="ISBN or book title" /><datalist id="delete-suggestions"></datalist></div>
+        <div class="admin-actions"><button class="admin-btn admin-btn-submit" onclick="handleDeleteSearch()">Search</button></div>
+        <div id="delete-form">
+          <div class="admin-field"><label>Title</label><input id="delete-title" readonly /></div>
+          <div class="admin-field"><label>ISBN</label><input id="delete-isbn" readonly /></div>
+          <div class="admin-field"><label>Author</label><input id="delete-author" readonly /></div>
+          <div class="admin-field"><label>Price</label><input id="delete-price" readonly /></div>
+          <div class="admin-field"><label>Genre</label><input id="delete-genre" readonly /></div>
+          <div class="admin-field"><label>Publisher</label><input id="delete-publisher" readonly /></div>
+          <div class="admin-field"><label>Publication date</label><input id="delete-pubdate" readonly /></div>
+          <div class="admin-field"><label>Synopsis</label><textarea id="delete-synopsis" rows="3" readonly></textarea></div>
+          <div class="admin-actions">
+            <button class="admin-btn admin-btn-danger" onclick="handleDelete()">Delete</button>
+            <button class="admin-btn admin-btn-clear" onclick="clearForm('delete-form','delete-msg')">Clear</button>
+          </div>
+          <div class="admin-msg" id="delete-msg"></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:3000/api';
+    let editBookId = null;
+    let deleteBookId = null;
+
+    
+    
+    // Simple debounce
+    function debounce(fn, wait=300){
+      let t;
+      return (...args)=>{ clearTimeout(t); t = setTimeout(()=>fn(...args), wait); };
+    }
+
+    async function fetchSuggestions(query, target) {
+      if (!query) { target.innerHTML = ''; return; }
+      try {
+        const res = await fetch(`${API_BASE_URL}/books?title=${encodeURIComponent(query)}`);
+        const json = await res.json();
+        if (!res.ok || !json.data) return;
+        // Populate datalist with unique titles and ISBNs
+        const seen = new Set();
+        target.innerHTML = json.data.slice(0,10).map(b=>{
+          const label = b.title + (b.isbn ? ` — ${b.isbn}` : '');
+          if (seen.has(label)) return '';
+          seen.add(label);
+          return `<option value="${label}"></option>`;
+        }).join('');
+      } catch (e) { /* ignore network errors for suggestions */ }
+    }
+
+    const debouncedEditSuggest = debounce(q => fetchSuggestions(q, document.getElementById('edit-suggestions')), 250);
+    const debouncedDeleteSuggest = debounce(q => fetchSuggestions(q, document.getElementById('delete-suggestions')), 250);
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const e = document.getElementById('edit-query');
+      const d = document.getElementById('delete-query');
+      e.addEventListener('input', (ev)=> debouncedEditSuggest(ev.target.value.trim()));
+      d.addEventListener('input', (ev)=> debouncedDeleteSuggest(ev.target.value.trim()));
+    });
+
+    function showMsg(id, text, isError=false) {
+      const el = document.getElementById(id);
+      el.textContent = text;
+      el.style.color = isError ? '#f87171' : 'var(--teal-light)';
+    }
+
+    function clearForm(formId, msgId) {
+      const container = document.getElementById(formId);
+      if (!container) return;
+      container.querySelectorAll('input, textarea').forEach(i => { if (!i.readOnly) i.value = ''; });
+      if (msgId) document.getElementById(msgId).textContent = '';
+    }
+
+    // ------------ Add ------------
+    async function handleAdd() {
+      const title = document.getElementById('add-title').value.trim();
+      const isbn = document.getElementById('add-isbn').value.trim();
+      const author = document.getElementById('add-author').value.trim();
+      const price = document.getElementById('add-price').value;
+      if (!title || !isbn || !author || !price) { showMsg('add-msg','Please fill required fields',true); return; }
+
+      const body = {
+        isbn, title, author,
+        price: parseFloat(price),
+        genre: document.getElementById('add-genre').value.trim(),
+        publisher: document.getElementById('add-publisher').value.trim(),
+        pub_date: document.getElementById('add-pubdate').value || null,
+        synopsis: document.getElementById('add-synopsis').value.trim() || ''
+      };
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/books`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+        const json = await res.json();
+        if (res.ok) {
+          // clear inputs but keep the success message visible
+          clearForm('add-form', null);
+          document.getElementById('add-msg').textContent = '';
+          showMsg('add-msg','Book added');
+        } else {
+          showMsg('add-msg', json.message || 'Add failed', true);
+        }
+      } catch (err) {
+        showMsg('add-msg','Network error', true);
+      }
+    }
+
+    // ------------ Edit Search & Submit ------------
+    function extractIsbnFromLabel(q) {
+      // datalist labels are `Title — ISBN` when suggestions generated
+      if (!q) return null;
+      const parts = q.split('—').map(s=>s.trim());
+      const last = parts[parts.length-1];
+      // simple ISBN detection (10 or 13 digits, may include X)
+      if (/^[0-9Xx-]{10,17}$/.test(last)) return last.replace(/-/g,'');
+      // also accept pure digits of length 10 or 13
+      if (/^\d{10}$/.test(last) || /^\d{13}$/.test(last)) return last;
+      return null;
+    }
+
+    async function handleEditSearch() {
+      const qRaw = document.getElementById('edit-query').value.trim();
+      if (!qRaw) { showMsg('edit-msg','Please enter ISBN or title', true); return; }
+      try {
+        // If user picked a suggestion like "Title — ISBN", extract ISBN
+        const maybeIsbn = extractIsbnFromLabel(qRaw);
+        if (maybeIsbn) {
+          const res = await fetch(`${API_BASE_URL}/books/isbn/${encodeURIComponent(maybeIsbn)}`);
+          const json = await res.json();
+          if (res.ok && json.data) { populateEditForm(json.data); return; }
+        }
+
+        // Try ISBN directly (user may have typed ISBN)
+        let res = await fetch(`${API_BASE_URL}/books/isbn/${encodeURIComponent(qRaw)}`);
+        let json = await res.json();
+        if (res.ok && json.data) { populateEditForm(json.data); return; }
+
+        // Fallback: search by title (partial). Take exact title match if available, otherwise first result
+        res = await fetch(`${API_BASE_URL}/books?title=${encodeURIComponent(qRaw)}`);
+        json = await res.json();
+        if (!res.ok || !json.data || json.data.length === 0) { showMsg('edit-msg','Book not found', true); return; }
+        const exact = json.data.find(b => (b.title || '').toLowerCase() === qRaw.toLowerCase());
+        populateEditForm(exact || json.data[0]);
+      } catch (err) {
+        showMsg('edit-msg','Network error', true);
+      }
+    }
+
+    function populateEditForm(book) {
+      editBookId = book.id;
+      document.getElementById('edit-title').value = book.title || '';
+      document.getElementById('edit-isbn_field').value = book.isbn || book.ISBN || '';
+      document.getElementById('edit-author').value = book.author || '';
+      document.getElementById('edit-price').value = book.price || '';
+      document.getElementById('edit-genre').value = book.genre || '';
+      document.getElementById('edit-publisher').value = book.publisher || '';
+      document.getElementById('edit-pubdate').value = book.pub_date ? book.pub_date.split('T')[0] : '';
+      document.getElementById('edit-synopsis').value = book.synopsis || '';
+      showMsg('edit-msg','Book loaded');
+    }
+
+    async function handleEdit() {
+      if (!editBookId) { showMsg('edit-msg','Search and load a book first', true); return; }
+      const body = {
+        title: document.getElementById('edit-title').value.trim(),
+        isbn: document.getElementById('edit-isbn_field').value.trim(),
+        author: document.getElementById('edit-author').value.trim(),
+        price: parseFloat(document.getElementById('edit-price').value) || null,
+        genre: document.getElementById('edit-genre').value.trim(),
+        publisher: document.getElementById('edit-publisher').value.trim(),
+        pub_date: document.getElementById('edit-pubdate').value || null,
+        synopsis: document.getElementById('edit-synopsis').value.trim()
+      };
+      try {
+        const res = await fetch(`${API_BASE_URL}/books/${editBookId}`, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+        const json = await res.json();
+        if (res.ok) {
+          showMsg('edit-msg','Book updated');
+        } else {
+          showMsg('edit-msg',json.message || 'Update failed', true);
+        }
+      } catch (err) {
+        showMsg('edit-msg','Network error', true);
+      }
+    }
+
+    // ------------ Delete Search & Submit ------------
+    async function handleDeleteSearch() {
+      const qRaw = document.getElementById('delete-query').value.trim();
+      if (!qRaw) { showMsg('delete-msg','Please enter ISBN or title', true); return; }
+      try {
+        const maybeIsbn = extractIsbnFromLabel(qRaw);
+        if (maybeIsbn) {
+          const res = await fetch(`${API_BASE_URL}/books/isbn/${encodeURIComponent(maybeIsbn)}`);
+          const json = await res.json();
+          if (res.ok && json.data) { populateDeleteForm(json.data); return; }
+        }
+
+        let res = await fetch(`${API_BASE_URL}/books/isbn/${encodeURIComponent(qRaw)}`);
+        let json = await res.json();
+        if (res.ok && json.data) { populateDeleteForm(json.data); return; }
+
+        res = await fetch(`${API_BASE_URL}/books?title=${encodeURIComponent(qRaw)}`);
+        json = await res.json();
+        if (!res.ok || !json.data || json.data.length === 0) { showMsg('delete-msg','Book not found', true); return; }
+        const exact = json.data.find(b => (b.title || '').toLowerCase() === qRaw.toLowerCase());
+        populateDeleteForm(exact || json.data[0]);
+      } catch (err) {
+        showMsg('delete-msg','Network error', true);
+      }
+    }
+
+    function populateDeleteForm(book) {
+      deleteBookId = book.id;
+      document.getElementById('delete-title').value = book.title || '';
+      document.getElementById('delete-isbn').value = book.isbn || book.ISBN || '';
+      document.getElementById('delete-author').value = book.author || '';
+      document.getElementById('delete-price').value = book.price || '';
+      document.getElementById('delete-genre').value = book.genre || '';
+      document.getElementById('delete-publisher').value = book.publisher || '';
+      document.getElementById('delete-pubdate').value = book.pub_date ? book.pub_date.split('T')[0] : '';
+      document.getElementById('delete-synopsis').value = book.synopsis || '';
+      showMsg('delete-msg','Book loaded');
+    }
+
+    async function handleDelete() {
+      if (!deleteBookId) { showMsg('delete-msg','Search and load a book first', true); return; }
+      try {
+        const res = await fetch(`${API_BASE_URL}/books/${deleteBookId}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (res.ok) {
+          // clear displayed (readonly) fields and the search box, then show confirmation
+          ['delete-title','delete-isbn','delete-author','delete-price','delete-genre','delete-publisher','delete-pubdate','delete-synopsis'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+          });
+          document.getElementById('delete-query').value = '';
+          deleteBookId = null;
+          showMsg('delete-msg','Book deleted');
+        } else {
+          showMsg('delete-msg',json.message || 'Delete failed', true);
+        }
+      } catch (err) {
+        showMsg('delete-msg','Network error', true);
+      }
+    }
+  </script>
+</body>
+</html>

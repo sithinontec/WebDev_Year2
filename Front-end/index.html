@@ -52,7 +52,7 @@
 
     <!-- Today's Top Picks -->
     <h2 class="section-heading">Today's Top Picks</h2>
-    <div class="book-grid">
+    <div id="top-picks" class="book-grid">
 
       <div class="book-card">
         <div class="book-cover">Book Cover</div>
@@ -114,7 +114,7 @@
 
     <!-- All Books -->
     <h2 class="section-heading">All books</h2>
-    <div class="book-grid">
+    <div id="all-books" class="book-grid">
 
       <div class="book-card">
         <div class="book-cover">Book Cover</div>
@@ -209,6 +209,73 @@
     </div><!-- /all books grid -->
 
   </main>
+  </main>
 
+  <script>
+    // Build cover URL from ISBN using Open Library
+    function coverUrl(isbn) {
+      if (!isbn) return '';
+      return `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
+    }
+
+    function createCard(book) {
+      const card = document.createElement('div');
+      card.className = 'book-card';
+
+      const cover = document.createElement('div');
+      cover.className = 'book-cover';
+      const img = document.createElement('img');
+      img.src = coverUrl(book.ISBN || book.isbn || '');
+      img.alt = book.title || 'cover';
+      img.onerror = () => { img.style.display = 'none'; cover.textContent = 'No cover'; };
+      cover.appendChild(img);
+
+      const info = document.createElement('div');
+      info.className = 'book-info';
+      const title = document.createElement('span');
+      title.className = 'book-title';
+      title.textContent = book.title || book.title;
+      const author = document.createElement('span');
+      author.className = 'book-author';
+      author.textContent = (book.authorName || book.author || book.author_name || 'Unknown');
+      const price = document.createElement('span');
+      price.className = 'book-price';
+      price.textContent = (book.price !== undefined) ? `${book.price} baht` : '';
+
+      info.appendChild(title);
+      info.appendChild(author);
+      info.appendChild(price);
+
+      card.appendChild(cover);
+      card.appendChild(info);
+      return card;
+    }
+
+    async function loadBooks() {
+      try {
+        const resp = await fetch('http://localhost:3000/api/books');
+        const data = await resp.json();
+        if (!data || !data.data) return;
+        const books = data.data;
+
+        const topGrid = document.getElementById('top-picks');
+        const allGrid = document.getElementById('all-books');
+        topGrid.innerHTML = '';
+        allGrid.innerHTML = '';
+
+        // Top picks: first 6
+        const top = books.slice(0, 6);
+        top.forEach(b => topGrid.appendChild(createCard(b)));
+
+        // All books
+        books.forEach(b => allGrid.appendChild(createCard(b)));
+      } catch (err) {
+        console.error('Failed to load books', err);
+      }
+    }
+
+    // Load on page ready
+    document.addEventListener('DOMContentLoaded', loadBooks);
+  </script>
 </body>
 </html>

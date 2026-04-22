@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
     if (genre) filters.genre = genre;
 
     // Get filtered books
-    const books = db.getBooks(filters);
+    const books = await db.getBooks(filters);
 
     res.json({
       success: true,
@@ -108,7 +108,7 @@ router.get('/:id', async (req, res) => {
     const { id } = req.params;
     
     // Get book by ID
-    const book = db.getBookById(id);
+    const book = await db.getBookById(id);
 
     if (!book) {
       return res.status(404).json({
@@ -166,7 +166,7 @@ router.get('/isbn/:isbn', async (req, res) => {
     const { isbn } = req.params;
     
     // Get book by ISBN
-    const book = db.getBookByIsbn(isbn);
+    const book = await db.getBookByIsbn(isbn);
 
     if (!book) {
       return res.status(404).json({
@@ -243,7 +243,7 @@ router.post('/', async (req, res) => {
     }
 
     // Check if ISBN already exists
-    const existingBook = db.getBookByIsbn(isbn);
+    const existingBook = await db.getBookByIsbn(isbn);
     if (existingBook) {
       return res.status(409).json({
         success: false,
@@ -252,7 +252,7 @@ router.post('/', async (req, res) => {
     }
 
     // Insert new book
-    const newBook = db.insertBook({
+    const newBook = await db.insertBook({
       isbn,
       title,
       author,
@@ -327,7 +327,7 @@ router.put('/:id', async (req, res) => {
     const updateData = req.body;
 
     // Check if book exists
-    const existingBook = db.getBookById(id);
+    const existingBook = await db.getBookById(id);
     if (!existingBook) {
       return res.status(404).json({
         success: false,
@@ -336,7 +336,7 @@ router.put('/:id', async (req, res) => {
     }
 
     // Update book
-    const updatedBook = db.updateBook(id, updateData);
+    const updatedBook = await db.updateBook(id, updateData);
 
     res.json({
       success: true,
@@ -393,7 +393,7 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params;
 
     // Check if book exists
-    const existingBook = db.getBookById(id);
+    const existingBook = await db.getBookById(id);
     if (!existingBook) {
       return res.status(404).json({
         success: false,
@@ -402,7 +402,7 @@ router.delete('/:id', async (req, res) => {
     }
 
     // Delete book
-    db.deleteBook(id);
+    await db.deleteBook(id);
 
     res.json({
       success: true,
