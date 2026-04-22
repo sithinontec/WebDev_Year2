@@ -140,26 +140,24 @@
       }
     }
 
-    function handleSubmit() {
-      const username = document.getElementById('login-username').value.trim();
-      const password = document.getElementById('login-password').value;
-      const errorEl  = document.getElementById('login-error');
+   async function handleSubmit() {
+  const username = document.getElementById('login-username').value;
+  const password = document.getElementById('login-password').value;
 
-      if (!username || !password) {
-        errorEl.textContent = 'Please fill in both fields.';
-        return;
-      }
+  const res = await fetch("http://localhost:3000/api/auth/login", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ username, password })
+  });
 
-      // Placeholder: replace with real auth logic
-      if (username === 'Ludwighandsome' && password === '12345678') {
-        errorEl.style.color = 'var(--teal-light)';
-        errorEl.textContent = 'Login successful! Redirecting…';
-        setTimeout(() => location.href = 'admin.html', 1000);
-      } else {
-        errorEl.style.color = '#f87171';
-        errorEl.textContent = 'Incorrect username or password.';
-      }
-    }
+  const data = await res.json();
+
+  if (data.success) {
+    location.href = "admin.html";
+  } else {
+    document.getElementById('login-error').textContent = "Invalid login";
+  }
+}
 
     function handleClear() {
       document.getElementById('login-username').value = '';

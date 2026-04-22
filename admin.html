@@ -292,26 +292,111 @@
       if (msgId) document.getElementById(msgId).textContent = '';
     }
 
-    function handleAdd() {
-      const inputs = document.querySelectorAll('#add-form input, #add-form textarea');
-      const empty = [...inputs].some(i => !i.value.trim());
-      if (empty) { showMsg('add-msg', 'Please fill in all fields.', 'error'); return; }
-      showMsg('add-msg', 'Book added successfully!', 'success');
-    }
+async function handleAdd() {
+  const inputs = document.querySelectorAll('#add-form input, #add-form textarea');
 
-    function handleEditSearch() {
-      const isbn = document.getElementById('edit-isbn').value.trim();
-      if (!isbn) { showMsg('edit-msg', 'Please enter an ISBN to search.', 'error'); return; }
-      // Placeholder: in a real app, fetch book data by ISBN and populate fields
-      showMsg('edit-msg', 'Book found. You may edit the fields below.', 'success');
-    }
+  const data = {
+    title: inputs[0].value,
+    isbn: inputs[1].value,
+    author: inputs[2].value,
+    price: Number(inputs[3].value),
+    genre: inputs[4].value,
+    publisher: inputs[5].value,
+    pub_date: inputs[6].value,
+    cover_url: inputs[7].value,
+    synopsis: inputs[8].value
+  };
 
-    function handleEdit() {
-      const inputs = document.querySelectorAll('#edit-form input, #edit-form textarea');
-      const empty = [...inputs].some(i => !i.value.trim());
-      if (empty) { showMsg('edit-msg', 'Please fill in all fields.', 'error'); return; }
-      showMsg('edit-msg', 'Book updated successfully!', 'success');
-    }
+  const res = await fetch("http://localhost:3000/api/books", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(data)
+  });
+
+  const result = await res.json();
+
+  if (result.success) {
+    showMsg('add-msg', 'Book added!', 'success');
+  } else {
+    showMsg('add-msg', 'Error adding book', 'error');
+  }
+}
+
+//     function handleEditSearch() {
+//       const isbn = document.getElementById('edit-isbn').value.trim();
+//       if (!isbn) { showMsg('edit-msg', 'Please enter an ISBN to search.', 'error'); return; }
+//       // Placeholder: in a real app, fetch book data by ISBN and populate fields
+//       showMsg('edit-msg', 'Book found. You may edit the fields below.', 'success');
+//     }
+//     async function handleEditSearch() {
+//   const isbn = document.getElementById('edit-isbn').value.trim();
+
+//   const result = await api.searchBooks({ isbn });
+
+//   if (!result.success || result.data.length === 0) {
+//     alert('Book not found');
+//     return;
+//   }
+
+//   const book = result.data[0];
+
+//   const inputs = document.querySelectorAll('#edit-form input, #edit-form textarea');
+
+//   inputs[0].value = book.title || '';
+//   inputs[1].value = book.isbn || '';
+//   inputs[2].value = book.author || '';
+//   inputs[3].value = book.price || '';
+//   inputs[4].value = book.genre || '';
+//   inputs[5].value = book.publisher || '';
+//   inputs[6].value = book.pub_date?.split('T')[0] || '';
+//   inputs[7].value = book.cover_url || '';
+//   inputs[8].value = book.synopsis || '';
+// }
+
+//     function handleEdit() {
+//       const inputs = document.querySelectorAll('#edit-form input, #edit-form textarea');
+//       const empty = [...inputs].some(i => !i.value.trim());
+//       if (empty) { showMsg('edit-msg', 'Please fill in all fields.', 'error'); return; }
+//       showMsg('edit-msg', 'Book updated successfully!', 'success');
+//     }
+
+//     async function handleEdit() {
+//   const inputs = document.querySelectorAll('#edit-form input, #edit-form textarea');
+
+//   const data = {
+//     title: inputs[0].value,
+//     isbn: inputs[1].value,
+//     author: inputs[2].value,
+//     price: Number(inputs[3].value),
+//     genre: inputs[4].value,
+//     publisher: inputs[5].value,
+//     pub_date: inputs[6].value,
+//     cover_url: inputs[7].value,
+//     synopsis: inputs[8].value
+//   };
+
+//   // VERY IMPORTANT: you need book ID
+//   const id = window.currentEditId;
+
+//   if (!id) {
+//     showMsg('edit-msg', 'Please search book first', 'error');
+//     return;
+//   }
+
+//   const res = await fetch(`http://localhost:3000/api/books/${id}`, {
+//     method: "PUT",
+//     headers: {"Content-Type": "application/json"},
+//     body: JSON.stringify(data)
+//   });
+
+//   const result = await res.json();
+
+//   if (result.success) {
+//     showMsg('edit-msg', 'Book updated!', 'success');
+//   } else {
+//     showMsg('edit-msg', 'Update failed', 'error');
+//   }
+// }
 
     function handleDeleteSearch() {
       const isbn = document.getElementById('delete-isbn').value.trim();
@@ -320,6 +405,31 @@
       showMsg('delete-msg', 'Book found. Press Submit to confirm deletion.', 'success');
     }
 
+//     async function handleDeleteSearch() {
+//   const isbn = document.getElementById('delete-isbn').value.trim();
+
+//   const result = await api.searchBooks({ isbn });
+
+//   if (!result.success || result.data.length === 0) {
+//     alert('Book not found');
+//     return;
+//   }
+
+//   const book = result.data[0];
+
+//   const inputs = document.querySelectorAll('#delete-form input, #delete-form textarea');
+
+//   inputs[0].value = book.title || '';
+//   inputs[1].value = book.isbn || '';
+//   inputs[2].value = book.author || '';
+//   inputs[3].value = book.price || '';
+//   inputs[4].value = book.genre || '';
+//   inputs[5].value = book.publisher || '';
+//   inputs[6].value = book.pub_date || '';
+//   inputs[7].value = book.cover_url || '';
+//   inputs[8].value = book.synopsis || '';
+// }
+
     function handleDelete() {
       const isbn = document.getElementById('delete-isbn').value.trim();
       if (!isbn) { showMsg('delete-msg', 'Search for a book first.', 'error'); return; }
@@ -327,6 +437,22 @@
       clearForm('delete-form', null);
       document.getElementById('delete-isbn').value = '';
     }
+//   async function handleDelete() {
+//   const isbn = document.getElementById('delete-isbn').value.trim();
+
+//   const result = await api.searchBooks({ isbn });
+
+//   if (!result.success || result.data.length === 0) {
+//     alert('Book not found');
+//     return;
+//   }
+
+//   const id = result.data[0].id;
+
+//   await api.deleteBook(id);
+
+//   alert('Deleted successfully');
+// }
   </script>
 
 </body>

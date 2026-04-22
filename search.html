@@ -288,25 +288,25 @@
     // Render Books - Creates book card HTML
     // ============================================
     
-    function renderBooks(books) {
-      const grid = document.getElementById('results-grid');
-      
-      grid.innerHTML = books.map(book => `
-        <article class="book-card" onclick="goToDetail(${book.id})" title="Click to view details">
-          <div class="book-cover">
-            ${book.cover_url 
-              ? `<img src="${book.cover_url}" alt="${book.title} cover" onerror="this.parentElement.innerHTML='<span class=placeholder>Book Cover</span>'" />`
-              : '<span class="placeholder">Book Cover</span>'
-            }
-          </div>
-          <div class="book-info">
-            <span class="book-title">${escapeHtml(book.title)}</span>
-            <span class="book-author">${escapeHtml(book.author)}</span>
-            <span class="book-price">${book.price} baht</span>
-          </div>
-        </article>
-      `).join('');
-    }
+   function renderBooks(books) {
+  const grid = document.getElementById('results-grid');
+  
+  grid.innerHTML = books.map(book => `
+    <article class="book-card" onclick="goToDetail(${book.id})">
+      <div class="book-cover">
+        ${book.cover_url
+          ? `<img src="${book.cover_url}" />`
+          : '<span class="placeholder">Book Cover</span>'
+        }
+      </div>
+      <div class="book-info">
+        <span class="book-title">${book.title}</span>
+        <span class="book-author">${book.author}</span>
+        <span class="book-price">${book.price} baht</span>
+      </div>
+    </article>
+  `).join('');
+}
     
     // ============================================
     // Navigate to Detail Page
